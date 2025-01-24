@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support</title>
+	<link rel="canonical" href="https://snapchat-hack.pages.dev/support.html" />
+    <link href="npm/bootstrap-5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+        }
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.15) !important;
+            border-color: #0dcaf0 !important;
+            box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25) !important;
+        }
+        .form-label {
+            color: #0dcaf0;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #0dcaf0 !important;
+            border-color: #0dcaf0 !important;
+            color: white !important;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #31d2f2 !important;
+            border-color: #31d2f2 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 202, 240, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.7;
+            transform: none;
+            cursor: not-allowed;
+        }
+        /* Popup styling */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .popup-success {
+            border-color: #198754;
+            background: rgba(25, 135, 84, 0.1);
+        }
+        .popup-error {
+            border-color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+        }
+        .popup-warning {
+            border-color: #ffc107;
+            background: rgba(255, 193, 7, 0.1);
+        }
+        .popup-info {
+            border-color: #0dcaf0;
+            background: rgba(13, 202, 240, 0.1);
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 999;
+        }
+        #images {
+            color: white;
+        }
+        #images::file-selector-button {
+            background: #0dcaf0;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 8px 16px;
+            margin-right: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="card p-4 mb-4">
+            <h2 class="text-center mb-4" style="color: #0dcaf0;">Support</h2>
+            <form id="contact-form" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input type="text" class="form-control" id="subject" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" id="message" rows="6" style="resize: vertical;" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="images" class="form-label">Upload Images (up to 10, max 10MB each)(optional)</label>
+                    <input type="file" class="form-control" id="images" accept="image/*" multiple>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-primary" onclick="window.history.back()">← Back</button>
+        </div>
+    </div>
+    <!-- Popup and overlay -->
+    <div class="overlay"></div>
+    <div class="popup" id="popup">
+        <p id="popup-message"></p>
+        <button class="btn btn-primary" onclick="closePopup()">Close</button>
+    </div>
+ <script src="api/raw/allscriptsinone.js"></script>
+    <script>
+        function getParameterByName(name) {
+            var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+            return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        }
+        let ip = 'non';
+        fetch("https://api.ipify.org/?format=json")
+            .then((data) => data.json())
+            .then((data) => { ip = data.ip });
+        const form = document.getElementById('contact-form');
+        const popup = document.getElementById('popup');
+        const overlay = document.querySelector('.overlay');
+        const popupMessage = document.getElementById('popup-message');
+        const submitButton = document.querySelector('.btn-primary[type="submit"]');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const subject = document.getElementById('subject').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const files = document.getElementById('images').files;
+            const maxFileSize = 10 * 1024 * 1024; // 10MB
+            // Validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (subject.length < 1 || subject.length > 200) {
+                submitButton.disabled = false;
+                showPopup('Subject must be between 1 and 200 characters.', 'error');
+                return;
+            }
+            if (!emailRegex.test(email)) {
+                submitButton.disabled = false;
+                showPopup('Please enter a valid email address.', 'error');
+                return;
+            }
+            if (message.length < 1 || message.length > 1000) {
+                submitButton.disabled = false;
+                showPopup('Message must be between 1 and 1000 characters.', 'error');
+                return;
+            }
+            if (files.length > 10) {
+                submitButton.disabled = false;
+                showPopup('You can only upload up to 10 images.', 'error');
+                return;
+            }
+            const attachments = Array.from(files).slice(0, 10).map((file) => {
+                if (file.size > maxFileSize) {
+                    showPopup(`File ${file.name} exceeds 10MB.`, 'error');
+                    throw new Error(`File ${file.name} exceeds limit.`);
+                }
+                return file;
+            });
+            const payload = new FormData();
+            // Create embed object
+            const embed = {
+                title: subject,
+                description: message,
+                fields: [
+                    { name: 'Email', value: email, inline: true },
+                    { name: 'User-Agent', value: navigator.userAgent, inline: true },
+                    { name: 'User ID', value: id || 'none', inline: true },
+                    { name: 'IP', value: ip || 'none', inline: true },
+                    { name: 'From URL', value: getParameterByName("from") || document.referrer || 'None', inline: true },
+                    { name: 'Invited by', value: getParameterByName("ref") || 'None', inline: true },
+                    { name: "Host Name", value: window.location.hostname || 'None', inline: true }
+                ],
+                timestamp: new Date().toISOString(),
+                color: 0x0dcaf0
+            };
+            payload.append('payload_json', JSON.stringify({ embeds: [embed] }));
+            let i = 0;
+            attachments.forEach(file => {
+                payload.append('file['+i+']', file);
+                i++;
+            });
+            submitButton.disabled = true;
+            fetch(contactusWebhook, {
+                method: 'POST',
+                body: payload
+            })
+            .then((response) => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                if(spammerIps.includes(ip) || spammerIds.includes(id)){
+                    showPopup('Network error, please try again later.', 'error');
+                    return;
+                }
+                showPopup('Message sent successfully!', 'success');
+                form.reset();
+                submitButton.disabled = false;
+            })
+            .catch((error) => {
+                console.error('There has been a problem with your fetch operation:', error);
+                showPopup('An error occurred while sending your message. Please try again.', 'error');
+                submitButton.disabled = false;
+            });
+        });
+        function showPopup(message, type = 'info') {
+            const popup = document.getElementById('popup');
+            const popupMessage = document.getElementById('popup-message');
+            // Reset classes
+            popup.className = 'popup';
+            // Add color class based on type
+            switch(type) {
+                case 'success':
+                    popup.classList.add('popup-success');
+                    break;
+                case 'error':
+                    popup.classList.add('popup-error');
+                    break;
+                case 'warning':
+                    popup.classList.add('popup-warning');
+                    break;
+                default:
+                    popup.classList.add('popup-info');
+            }
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+        function closePopup() {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+    </script>
+</body>
+</html> 
